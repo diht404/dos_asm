@@ -8,7 +8,29 @@ Start:
 	mov ax, 0b800h
 	mov es, ax
 	
+	call sumNums
+	
+	mov ax, 4c00h
+	int 21h
+
+
+;----------------------------
+; Gets two numbers from console
+; and prints their sum
+;
+; Expects: es -> VRAM 
+; Entry:
+; Destroys: ax, cx, di, si
+; Output: ax - number
+;----------------------------
+sumNums proc
+	
 	call getNumber
+	push ax
+	call getNumber
+	pop bx
+	add ax, bx
+
 	mov bx, 160d*18 + 160d/2
 	mov dl, 4eh
 	call printBin
@@ -22,9 +44,13 @@ Start:
 	mov bx, 160d*20 + 160d/2
 	mov dl, 04eh
 	call printHex
+	
+	push ax
+		
+	pop bx
+	ret
+	endp
 
-	mov ax, 4c00h
-	int 21h
 
 
 ;----------------------------
